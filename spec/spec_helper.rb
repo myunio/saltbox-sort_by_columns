@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "bundler/setup"
-require "sort_by_columns"
+require "saltbox-sort_by_columns"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

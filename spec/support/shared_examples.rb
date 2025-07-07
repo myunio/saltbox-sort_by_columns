@@ -16,7 +16,7 @@ RSpec.shared_examples "sortable by columns" do |options|
   # Get the model table name
   model_table = described_class.table_name
 
-  it { should include_module(SortByColumns::Model) }
+  it { should include_module(Saltbox::SortByColumns::Model) }
 
   describe "allowed columns" do
     it "adds the columns to the allowed list" do

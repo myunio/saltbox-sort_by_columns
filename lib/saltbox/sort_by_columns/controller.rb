@@ -6,14 +6,16 @@
 # In your controller ensure you call `apply_scopes` on the model scope
 # somewhere or the params won't be processed.
 
-module SortByColumns
-  module Controller
-    extend ActiveSupport::Concern
+module Saltbox
+  module SortByColumns
+    module Controller
+      extend ActiveSupport::Concern
 
-    included do
-      has_scope :sorted_by_columns, # the model scope
-        as: :sort, # the param name
-        only: :index
+      included do
+        has_scope :sorted_by_columns, # the model scope
+          as: :sort, # the param name
+          only: :index
+      end
     end
   end
 end

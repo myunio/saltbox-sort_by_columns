@@ -1,16 +1,16 @@
 # frozen_string_literal: true
 
-require_relative "lib/sort_by_columns/version"
+require_relative "lib/saltbox/sort_by_columns/version"
 
 Gem::Specification.new do |spec|
-  spec.name = "sort_by_columns"
-  spec.version = SortByColumns::VERSION
+  spec.name = "saltbox-sort_by_columns"
+  spec.version = Saltbox::SortByColumns::VERSION
   spec.authors = ["Sevenview Studios Inc."]
   spec.email = ["dev@sevenview.ca"]
 
-  spec.summary = "Column-based sorting for Rails models with association support"
-  spec.description = "Provides column-based sorting capabilities for Rails models with support for associations and custom scopes. Extracted from the Unio application for internal use."
-  spec.homepage = "https://github.com/yourusername/sort_by_columns"
+  spec.summary = "Saltbox column-based sorting for Rails models with association support"
+  spec.description = "Provides column-based sorting capabilities for Rails models with support for associations and custom scopes. Part of the Saltbox gem suite extracted from internal applications."
+  spec.homepage = "https://github.com/yourcompany/saltbox-sort_by_columns"
   spec.license = "MIT"
   spec.required_ruby_version = ">= 3.0.0"
 
@@ -19,8 +19,8 @@ Gem::Specification.new do |spec|
   spec.metadata["allowed_push_host"] = "TODO: Set to 'http://mygemserver.com'"
 
   spec.metadata["homepage_uri"] = spec.homepage
-  spec.metadata["source_code_uri"] = "https://github.com/yourusername/sort_by_columns"
-  spec.metadata["changelog_uri"] = "https://github.com/yourusername/sort_by_columns/blob/main/CHANGELOG.md"
+  spec.metadata["source_code_uri"] = "https://github.com/yourcompany/saltbox-sort_by_columns"
+  spec.metadata["changelog_uri"] = "https://github.com/yourcompany/saltbox-sort_by_columns/blob/main/CHANGELOG.md"
 
   # Specify which files should be added to the gem when it is released.
   spec.files = Dir.chdir(__dir__) do
