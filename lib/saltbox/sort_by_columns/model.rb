@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "active_support/concern"
+
 module Saltbox
   module SortByColumns
     # Adds column-based sorting capabilities to ActiveRecord models

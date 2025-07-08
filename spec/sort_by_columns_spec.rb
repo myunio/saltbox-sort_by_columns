@@ -17,3 +17,15 @@ RSpec.describe Saltbox::SortByColumns do
     expect(Saltbox::SortByColumns::Controller).to be_a(Module)
   end
 end
+
+# Basic integration test - full functionality is tested in the consuming applications
+RSpec.describe "SortByColumns integration" do
+  it "loads without errors" do
+    expect { require "saltbox-sort_by_columns" }.not_to raise_error
+  end
+
+  it "defines the expected constants" do
+    expect(defined?(Saltbox::SortByColumns::Model)).to eq("constant")
+    expect(defined?(Saltbox::SortByColumns::Controller)).to eq("constant")
+  end
+end

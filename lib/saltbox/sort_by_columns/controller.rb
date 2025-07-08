@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "active_support/concern"
+
 # Note: This module requires the use of the has_scope gem.
 # https://github.com/heartcombo/has_scope
 
