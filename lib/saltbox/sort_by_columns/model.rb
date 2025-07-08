@@ -200,7 +200,20 @@ module Saltbox
 
           # Strip the c_ prefix and call the custom scope with direction
           column = custom_column[2..]
-          send(:"sorted_by_#{column}", direction)
+          scope_method = :"sorted_by_#{column}"
+
+          # Check if the custom scope method exists
+          unless respond_to?(scope_method)
+            error_message = <<~ERROR
+              SortByColumns: model #{name} does not respond to '#{scope_method}' method.
+              Custom scope columns (starting with 'c_') require a corresponding scope method.
+              For column '#{custom_column}', define a scope: 'scope :#{scope_method}, ->(direction) { ... }'
+            ERROR
+            handle_error(error_message, custom_column)
+            return all
+          end
+
+          send(scope_method, direction)
         end
 
         # Processes standard columns for sorting
