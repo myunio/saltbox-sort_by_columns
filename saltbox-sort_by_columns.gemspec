@@ -31,13 +31,13 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   # Runtime dependencies
-  spec.add_runtime_dependency "rails", ">= 7.0"
-  spec.add_runtime_dependency "has_scope", "~> 0.8"
+  spec.add_runtime_dependency "rails"
+  spec.add_runtime_dependency "has_scope"
 
   # Development dependencies
-  spec.add_development_dependency "rspec", "~> 3.0"
-  spec.add_development_dependency "rspec-rails", "~> 6.0"
-  spec.add_development_dependency "sqlite3", "~> 1.4"
-  spec.add_development_dependency "standardrb", "~> 1.0"
-  spec.add_development_dependency "rake", "~> 13.0"
+  spec.add_development_dependency "rspec"
+  spec.add_development_dependency "rspec-rails"
+  spec.add_development_dependency "sqlite3"
+  spec.add_development_dependency "standardrb"
+  spec.add_development_dependency "rake"
 end
