@@ -1,4 +1,4 @@
-# SortByColumns
+# Saltbox::SortByColumns
 
 A Ruby gem that provides column-based sorting capabilities for Rails models with support for associations and custom scopes.
 
@@ -17,7 +17,7 @@ A Ruby gem that provides column-based sorting capabilities for Rails models with
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'sort_by_columns', git: 'https://github.com/yourcompany/sort_by_columns.git'
+gem 'saltbox-sort_by_columns', git: 'https://github.com/myunio/saltbox-sort_by_columns.git'
 ```
 
 And then execute:
@@ -30,11 +30,11 @@ bundle install
 
 ### Model Setup
 
-In your model, include the `SortByColumns::Model` module and specify which columns can be sorted:
+In your model, include the `Saltbox::SortByColumns::Model` module and specify which columns can be sorted:
 
 ```ruby
 class User < ApplicationRecord
-  include SortByColumns::Model
+  include Saltbox::SortByColumns::Model
 
   belongs_to :organization
   has_many :posts
@@ -45,11 +45,11 @@ end
 
 ### Controller Setup
 
-In your controller, include the `SortByColumns::Controller` module:
+In your controller, include the `Saltbox::SortByColumns::Controller` module:
 
 ```ruby
 class UsersController < ApplicationController
-  include SortByColumns::Controller
+  include Saltbox::SortByColumns::Controller
 
   def index
     @users = apply_scopes(User).page(params[:page])
@@ -95,6 +95,7 @@ For columns on associated models, use the `association__column` format:
 class User < ApplicationRecord
   belongs_to :organization
   
+  include Saltbox::SortByColumns::Model
   column_sortable_by :name, :organization__name, :organization__created_at
 end
 ```
@@ -117,6 +118,8 @@ For complex sorting logic, use custom scopes with the `c_` prefix:
 
 ```ruby
 class User < ApplicationRecord
+  include Saltbox::SortByColumns::Model
+  
   has_many :addresses
   
   column_sortable_by :name, :c_full_address
@@ -155,7 +158,7 @@ The gem includes a Railtie that automatically integrates with Rails applications
 
 - **Automatic Loading**: The gem automatically loads when Rails starts
 - **Shared Examples**: RSpec shared examples are automatically loaded when RSpec is available
-- **Configuration**: Provides `Rails.application.config.sort_by_columns` for future configuration options
+- **Configuration**: Provides `Rails.application.config.saltbox_sort_by_columns` for future configuration options
 
 The Railtie handles all the integration automatically - you don't need to do anything special.
 
@@ -179,6 +182,8 @@ RSpec.describe User, type: :model do
 end
 ```
 
+The shared examples are automatically loaded when RSpec is available, so you don't need to require them manually.
+
 ## Dependencies
 
 - Rails >= 7.0
@@ -190,7 +195,7 @@ For local development of the gem itself:
 
 ```bash
 # Set up local development
-bundle config local.sort_by_columns /path/to/sort_by_columns
+bundle config local.saltbox-sort_by_columns /path/to/saltbox-sort_by_columns
 bundle install
 
 # Run tests
@@ -201,6 +206,18 @@ rake standard
 
 # Build the gem
 rake build
+```
+
+For development in a Rails application using the gem:
+
+```bash
+# Set up local development when needed
+bundle config local.saltbox-sort_by_columns /path/to/saltbox-sort_by_columns
+bundle install
+
+# Return to remote gem when done
+bundle config --delete local.saltbox-sort_by_columns
+bundle install
 ```
 
 ## Contributing
@@ -224,7 +241,7 @@ This gem is available as open source under the terms of the [MIT License](https:
 
 ```ruby
 class Post < ApplicationRecord
-  include SortByColumns::Model
+  include Saltbox::SortByColumns::Model
 
   column_sortable_by :title, :published_at, :view_count
 end
@@ -234,7 +251,7 @@ end
 
 ```ruby
 class Member < ApplicationRecord
-  include SortByColumns::Model
+  include Saltbox::SortByColumns::Model
 
   belongs_to :organization
   belongs_to :current_status, class_name: "Status", optional: true
@@ -247,7 +264,7 @@ end
 
 ```ruby
 class User < ApplicationRecord
-  include SortByColumns::Model
+  include Saltbox::SortByColumns::Model
 
   has_many :orders
 
@@ -265,7 +282,7 @@ end
 
 ```ruby
 class UsersController < ApplicationController
-  include SortByColumns::Controller
+  include Saltbox::SortByColumns::Controller
 
   def index
     @users = apply_scopes(User.includes(:organization))

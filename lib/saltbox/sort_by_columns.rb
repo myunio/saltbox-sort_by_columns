@@ -36,3 +36,9 @@ module Saltbox
     #   GET /users?sort=c_custom_sort:desc
   end
 end
+
+# Load shared examples for RSpec when available
+if defined?(RSpec)
+  shared_examples_path = File.expand_path("../../spec/support/shared_examples.rb", __dir__)
+  require shared_examples_path if File.exist?(shared_examples_path)
+end
