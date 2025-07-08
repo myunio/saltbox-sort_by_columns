@@ -157,7 +157,10 @@ module Saltbox
             message = message.to_s.gsub("%{column}", column.to_s)
             raise ArgumentError, message
           else
-            Rails.logger.warn "SortByColumns ignoring #{is_critical ? "all columns due to" : "disallowed column:"} #{column}"
+            # Handle nil logger gracefully
+            if Rails.logger&.respond_to?(:warn)
+              Rails.logger.warn "SortByColumns ignoring #{is_critical ? "all columns due to" : "disallowed column:"} #{column}"
+            end
             nil
           end
         end
