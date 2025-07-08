@@ -8,6 +8,10 @@ require "active_support/core_ext/string"
 require "active_support/string_inquirer"
 require "logger"
 
+# Load ActiveRecord dependencies needed by the gem
+require "active_record"
+require "arel"
+
 # Mock Rails environment for testing
 unless defined?(Rails)
   # Create a mock Rails module with application support

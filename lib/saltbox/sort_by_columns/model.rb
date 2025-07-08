@@ -182,8 +182,8 @@ module Saltbox
             return all
           end
 
-          # Get the column and direction
-          custom_column, direction = by.split(",")[0].split(":")
+          # Get the column and direction, stripping whitespace
+          custom_column, direction = by.split(",")[0].split(":").map(&:strip)
           direction = normalize_direction(direction)
 
           # Ensure the column is allowed
@@ -214,8 +214,14 @@ module Saltbox
           allowed_fields = column_sortable_allowed_fields
 
           by.split(",").map(&:strip).each do |col_spec|
-            column, direction = col_spec.split(":")
+            # Skip empty column specifications (from multiple commas, etc.)
+            next if col_spec.blank?
+
+            column, direction = col_spec.split(":").map(&:strip)
             direction = normalize_direction(direction)
+
+            # Skip if column is blank or nil
+            next if column.blank?
 
             # Skip disallowed columns
             unless allowed_fields.include?(column.to_sym)
