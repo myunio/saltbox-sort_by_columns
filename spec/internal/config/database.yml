@@ -1,0 +1,7 @@
+# SQLite in-memory database for Combustion test application
+
+test:
+  adapter: sqlite3
+  database: ":memory:"
+  pool: 5
+  timeout: 5000 

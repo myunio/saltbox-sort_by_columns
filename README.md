@@ -6,7 +6,7 @@ A Ruby gem that provides column-based sorting capabilities for Rails models with
 
 - **Column Sorting**: Simple column sorting with direction support
 - **Association Sorting**: Sort by columns in associated models using `association__column` syntax
-- **Custom Scopes**: Support for custom sorting logic via `c_custom_name` pattern
+- **Custom Scopes**: Support for custom sorting logic via `c_*` pattern (backed by `sorted_by_*` scopes)
 - **Error Handling**: Development vs production error handling strategies
 - **SQL Generation**: Proper JOIN handling with NULL value management
 - **Rails Integration**: Automatic Rails integration via Railtie
@@ -177,7 +177,7 @@ GET /users?sort=name:asc,organization__name:desc
 
 ### Custom Scope Columns
 
-For complex sorting logic, use custom scopes with the `c_` prefix:
+For complex sorting logic, use custom scopes with the `c_` prefix. **The naming convention is critical**: a sortable column named `c_*` must be backed by a scope named `sorted_by_*`.
 
 ```ruby
 class User < ApplicationRecord
@@ -185,15 +185,22 @@ class User < ApplicationRecord
   
   has_many :addresses
   
+  # The sortable column name: c_full_address
   column_sortable_by :name, :c_full_address
 
-  # Required scope for custom sort
+  # Required scope name: sorted_by_full_address (c_ becomes sorted_by_)
   scope :sorted_by_full_address, ->(direction) {
     joins(:addresses)
       .order("addresses.street #{direction}, addresses.city #{direction}")
   }
 end
 ```
+
+#### Naming Convention Examples:
+
+- `c_full_address` → `sorted_by_full_address`
+- `c_total_orders` → `sorted_by_total_orders`
+- `c_latest_activity` → `sorted_by_latest_activity`
 
 API usage:
 ```
@@ -331,8 +338,10 @@ class User < ApplicationRecord
 
   has_many :orders
 
+  # Custom sortable column: c_total_orders
   column_sortable_by :name, :email, :c_total_orders
 
+  # Required scope: sorted_by_total_orders (c_ becomes sorted_by_)
   scope :sorted_by_total_orders, ->(direction) {
     joins(:orders)
       .group('users.id')
