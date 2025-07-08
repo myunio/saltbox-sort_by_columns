@@ -1,5 +1,25 @@
 # frozen_string_literal: true
 
+# Start code coverage before requiring any application files
+require "simplecov"
+SimpleCov.start do
+  add_filter "/spec/"
+  add_filter "/vendor/"
+
+  # Define coverage groups
+  add_group "Models", "lib/saltbox/sort_by_columns/model.rb"
+  add_group "Controllers", "lib/saltbox/sort_by_columns/controller.rb"
+  add_group "Railtie", "lib/saltbox/sort_by_columns/railtie.rb"
+  add_group "Core", ["lib/saltbox/sort_by_columns.rb", "lib/saltbox-sort_by_columns.rb"]
+
+  # Set minimum coverage thresholds
+  minimum_coverage 95
+  minimum_coverage_by_file 90
+
+  # Track branch coverage in addition to line coverage
+  enable_coverage :branch
+end
+
 require "bundler/setup"
 
 # Load ActiveSupport for blank? and other core extensions
