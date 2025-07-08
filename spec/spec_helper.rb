@@ -22,7 +22,7 @@ unless defined?(Rails)
       end
 
       def logger
-        @logger ||= Logger.new("/dev/null") # Null logger for tests
+        @logger ||= Logger.new(File::NULL) # Null logger for tests
       end
 
       def application

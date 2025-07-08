@@ -31,7 +31,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   # Runtime dependencies
-  spec.add_runtime_dependency "rails"
+  spec.add_runtime_dependency "rails", ">= 7.1"
   spec.add_runtime_dependency "has_scope"
 
   # Development dependencies

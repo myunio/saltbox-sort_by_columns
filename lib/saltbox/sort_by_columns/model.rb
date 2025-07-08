@@ -153,13 +153,19 @@ module Saltbox
         # @return [nil] Always returns nil
         # @raise [ArgumentError] In development environments, raises the provided error
         def handle_error(message, column, is_critical = false)
-          if Rails.env.local?
+          is_local_env = Rails.env.local?
+
+          if is_local_env
             message = message.to_s.gsub("%{column}", column.to_s)
             raise ArgumentError, message
           else
-            # Handle nil logger gracefully
-            if Rails.logger&.respond_to?(:warn)
-              Rails.logger.warn "SortByColumns ignoring #{is_critical ? "all columns due to" : "disallowed column:"} #{column}"
+            # Handle nil logger gracefully and wrap in rescue for logger exceptions
+            begin
+              if Rails.logger&.respond_to?(:warn)
+                Rails.logger.warn "SortByColumns ignoring #{is_critical ? "all columns due to" : "disallowed column:"} #{column}"
+              end
+            rescue => _logger_e
+              # Silently ignore logger errors to prevent them from affecting the main application
             end
             nil
           end
