@@ -37,8 +37,8 @@ module Saltbox
   end
 end
 
-# Load shared examples for RSpec when available
-if defined?(RSpec)
+# Load shared examples for RSpec when available and properly initialized
+if defined?(RSpec) && RSpec.respond_to?(:shared_examples)
   shared_examples_path = File.expand_path("../../spec/support/shared_examples.rb", __dir__)
   require shared_examples_path if File.exist?(shared_examples_path)
 end
