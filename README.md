@@ -71,6 +71,69 @@ GET /users?sort=name:asc,created_at:desc
 GET /users?sort=organization__name:asc
 ```
 
+## Integration with has_scope
+
+This gem is built on top of the [has_scope](https://github.com/heartcombo/has_scope) gem, which provides the foundation for parameter-based scope application in Rails controllers.
+
+### How it works
+
+**has_scope** handles the parameter processing and scope application, while **saltbox-sort_by_columns** provides the sorting logic:
+
+1. **Parameter Processing**: has_scope automatically reads the `sort` parameter from the request
+2. **Scope Definition**: This gem automatically defines a `sorted_by_columns` scope on your models
+3. **Scope Application**: has_scope's `apply_scopes` method applies the sorting scope with the parameter value
+4. **Sorting Logic**: This gem processes the sort parameter and generates the appropriate SQL
+
+### The `apply_scopes` method
+
+The `apply_scopes` method in your controllers comes from has_scope, not from this gem:
+
+```ruby
+class UsersController < ApplicationController
+  include Saltbox::SortByColumns::Controller  # This adds has_scope functionality
+
+  def index
+    # apply_scopes comes from has_scope
+    # It automatically applies the sorted_by_columns scope when sort param is present
+    @users = apply_scopes(User).page(params[:page])
+  end
+end
+```
+
+### Behind the scenes
+
+When you include `Saltbox::SortByColumns::Controller`, it automatically sets up has_scope for the `sort` parameter:
+
+```ruby
+# This is done automatically when you include the controller module
+has_scope :sorted_by_columns, using: :sort, type: :hash
+```
+
+This means:
+- has_scope looks for a `sort` parameter in the request
+- If found, it calls the `sorted_by_columns` scope on your model with the parameter value
+- This gem provides the `sorted_by_columns` scope implementation on your models
+
+### Parameter flow
+
+Here's how a request like `GET /users?sort=name:desc,organization__name:asc` gets processed:
+
+1. **has_scope** extracts `sort=name:desc,organization__name:asc` from params
+2. **has_scope** calls `User.sorted_by_columns("name:desc,organization__name:asc")`
+3. **This gem** parses the sort string and generates appropriate SQL with JOINs and ORDER clauses
+4. **has_scope** applies the resulting scope to build the final query
+
+### Why has_scope?
+
+has_scope provides several benefits that this gem leverages:
+
+- **Automatic parameter binding**: No need to manually check for sort parameters
+- **Scope chaining**: Works seamlessly with other scopes and query methods
+- **Consistent API**: Follows Rails conventions for parameter-based filtering
+- **Flexibility**: Easy to combine with other has_scope filters like search, pagination, etc.
+
+For more information about has_scope itself, see the [official documentation](https://github.com/heartcombo/has_scope).
+
 ## Column Types
 
 ### Simple Columns
