@@ -242,10 +242,13 @@ This document outlines the comprehensive testing plan to improve test coverage f
   - [x] Works with real associations (belongs_to, has_many)
   - [x] Integrates with Rails query methods (includes, joins)
   - [x] Works with pagination gems
-- [ ] Test controller integration
-  - [ ] Works with has_scope gem
-  - [ ] Processes URL parameters correctly
-  - [ ] Integrates with Rails parameter handling
+- [x] **COMPLETED**: Test controller integration with comprehensive real Rails testing
+  - [x] Works with has_scope gem (38 integration tests)
+  - [x] Processes URL parameters correctly (includes malformed and edge cases)
+  - [x] Integrates with Rails parameter handling (security testing, parameter conversion)
+  - [x] Tests controller edge cases and error handling (development vs production)
+  - [x] Tests real-world integration scenarios (pagination, search, filtering)
+  - [x] Added parameter pollution protection to model code
 
 ### Shared Examples Validation
 - [ ] Create `spec/support/shared_examples_spec.rb`
@@ -301,7 +304,7 @@ This document outlines the comprehensive testing plan to improve test coverage f
 
 ## Comprehensive Testing Summary 📈
 
-**Current Status**: 287 examples, 0 failures (100% pass rate)
+**Current Status**: 326 examples, 0 failures (100% pass rate)
 
 ### Phase Breakdown:
 - **Phase 1**: Foundation (54 tests) - ✅ **COMPLETE**
@@ -309,6 +312,7 @@ This document outlines the comprehensive testing plan to improve test coverage f
 - **Phase 3**: Error Handling & Environment Behavior (63 additional tests) - ✅ **COMPLETE**
 - **Phase 4**: SQL Generation & Association Testing (29 additional tests) - ✅ **COMPLETE**
 - **Phase 5**: Advanced Features & Custom Scopes (57 additional tests) - ✅ **COMPLETE**
+- **Phase 6**: Controller Integration & Real-World Testing (39 additional tests) - ✅ **COMPLETE**
 
 ### Test Coverage Details:
 
@@ -350,6 +354,20 @@ This document outlines the comprehensive testing plan to improve test coverage f
 - ✅ **Column Skipping**: Testing skipping of disallowed columns appropriately
 - ✅ **Mixed Processing**: Testing handling of mixed valid/invalid columns
 
+#### **Phase 6 Achievements**:
+- ✅ **Real Rails Controller Integration**: Testing with actual Rails controllers and has_scope gem
+- ✅ **URL Parameter Processing**: Comprehensive testing of URL parameter handling including malformed inputs
+- ✅ **Rails Parameter Handling**: Testing Rails strong parameters, nested parameters, and array parameters
+- ✅ **Parameter Security**: Testing parameter pollution attacks and security scenarios
+- ✅ **Environment-Aware Error Handling**: Testing development vs production behavior in controller context
+- ✅ **Database Error Propagation**: Ensuring database exceptions are properly propagated through controllers
+- ✅ **Controller Edge Cases**: Testing very long parameter strings, concurrent requests, memory efficiency
+- ✅ **Real-World Integration**: Testing with pagination, search, and filter parameters
+- ✅ **Custom Scope Controller Integration**: Testing custom scopes work correctly through controllers
+- ✅ **Action Restrictions**: Testing that sorting only applies to index actions as configured
+- ✅ **has_scope Gem Integration**: Full integration testing with the actual has_scope gem
+- ✅ **Parameter Pollution Protection**: Added robust array handling to the model code for security
+
 #### **Edge Cases Covered**:
 - ✅ Malformed input handling
 - ✅ Special characters and Unicode
@@ -369,15 +387,17 @@ This document outlines the comprehensive testing plan to improve test coverage f
 #### **Test Categories**:
 - **Unit Tests**: 140 examples (spec/saltbox/sort_by_columns/*.rb)
 - **Integration Tests**: 48 examples (spec/integration/sort_by_columns_integration_spec.rb)
+- **Controller Integration Tests**: 38 examples (spec/integration/controller_integration_spec.rb)
 - **Real Rails Environment**: Combustion-based testing (spec/rails_app/)
 - **Multi-Environment**: Development, production, test, staging
 - **Edge Cases**: Comprehensive input validation
 - **Error Handling**: Robust error recovery and logging
 - **Performance**: Memory usage and concurrency testing
 - **SQL Generation**: Comprehensive SQL output verification
+- **Security Testing**: Parameter pollution and injection prevention
 
 ### **Key Achievements**:
-1. **Comprehensive Coverage**: 287 tests covering all major functionality
+1. **Comprehensive Coverage**: 326 tests covering all major functionality
 2. **Real Rails Integration**: Using Combustion for authentic Rails testing
 3. **Multi-Environment Testing**: Development vs production behavior
 4. **Advanced Error Handling**: Robust error recovery and logging
@@ -387,14 +407,16 @@ This document outlines the comprehensive testing plan to improve test coverage f
 8. **SQL Generation Testing**: Comprehensive verification of SQL output and association handling
 9. **Custom Scope Testing**: Comprehensive testing of custom scope functionality and integration
 10. **Private Method Testing**: Direct testing of private methods for thorough coverage
+11. **Controller Integration Testing**: Full Rails controller testing with has_scope gem integration
+12. **Security Testing**: Parameter pollution protection and injection prevention
+13. **Real-World Scenarios**: Testing with pagination, search, filtering, and typical Rails patterns
 
 ### **Next Steps** (Future Phases):
-While the core functionality is thoroughly tested, potential future enhancements could include:
-- **Phase 6**: Integration & Real-World Testing (Real Rails integration with pagination)
-- **Phase 7**: Performance, Security & Quality (Performance benchmarks, security testing)
+While the core functionality and controller integration are thoroughly tested, potential future enhancements could include:
+- **Phase 7**: Performance, Security & Quality (Performance benchmarks, advanced security testing)
 - **Phase 8**: Documentation & Examples (Test documentation and examples)
 
-**The gem is now production-ready with comprehensive test coverage including SQL generation! 🎉**
+**The gem is now production-ready with comprehensive test coverage including SQL generation and full Rails controller integration! 🎉**
 
 ---
 

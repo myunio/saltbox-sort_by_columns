@@ -123,6 +123,13 @@ module Saltbox
         def sorted_by_columns(by)
           return all if by.blank?
 
+          # Handle parameter pollution where by might be an array
+          # In case of parameter pollution, take the first element or ignore if not a string
+          if by.is_a?(Array)
+            by = by.first
+            return all if by.blank? || !by.is_a?(String)
+          end
+
           if by.start_with?("c_")
             return handle_custom_scope(by)
           end

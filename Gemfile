@@ -13,4 +13,5 @@ group :development, :test do
   gem "rails", "~> 8.0"   # Rails 8 (current as of July 2025)
   gem "sqlite3", "~> 2.1"
   gem "combustion", "~> 1.5"
+  gem "has_scope", "~> 0.8.0"  # For controller integration testing
 end
