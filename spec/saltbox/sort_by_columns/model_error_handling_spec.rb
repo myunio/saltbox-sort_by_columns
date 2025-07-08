@@ -20,26 +20,40 @@ RSpec.describe Saltbox::SortByColumns::Model, "Error Handling & Environment Beha
   end
 
   describe "multi-environment error handling" do
+    # PATTERN: Environment-Aware Testing
+    # This section tests how the gem behaves differently across Rails environments.
+    # Key insight: Development shows errors for debugging, production silently logs and continues
+
     context "in test environment" do
       before do
+        # SETUP: Mock Rails environment detection
+        # We use local? = false to trigger production-like behavior
+        # Then override specific environment methods for granular control
         allow(Rails.env).to receive(:local?).and_return(false)
         allow(Rails.env).to receive(:test?).and_return(true)
         allow(Rails).to receive(:logger).and_return(double("logger", warn: nil))
       end
 
       it "logs warnings in test environment like production" do
+        # TEST PATTERN: Production-like error handling
+        # In non-development environments, invalid columns are logged and ignored
+        # The operation continues with valid columns only
         result = test_model.sorted_by_columns("invalid_column:asc")
 
         expect(Rails.logger).to have_received(:warn).with(/ignoring disallowed column/)
-        expect(result.count).to eq(3)
+        expect(result.count).to eq(3) # All users returned, no filtering by invalid column
       end
 
       it "does not catch database connection errors" do
-        # Database connection errors should propagate up to the application
-        # This is a conceptual test to ensure we don't wrap database operations in rescue blocks
+        # CRITICAL SAFETY TEST: Database errors must propagate
+        # The gem should NEVER catch database-level exceptions like connection errors
+        # This ensures that infrastructure problems are properly handled by the application
 
-        # Test that normal operations work
+        # Verify normal operations work (baseline test)
         expect(test_model.sorted_by_columns("name:asc")).to be_a(ActiveRecord::Relation)
+
+        # NOTE: Actual database connection testing requires more complex setup
+        # This conceptual test ensures we don't wrap ActiveRecord operations in overly broad rescue blocks
       end
     end
 
@@ -59,11 +73,17 @@ RSpec.describe Saltbox::SortByColumns::Model, "Error Handling & Environment Beha
     end
 
     context "with Rails.env.local? edge cases" do
+      # EDGE CASE TESTING: Non-standard Rails environment configurations
+      # Some Rails applications may monkey-patch or override environment detection
+      # These tests ensure robust behavior even with unexpected return values
+
       it "handles when Rails.env.local? returns non-boolean" do
+        # EDGE CASE: local? returns truthy non-boolean (some custom Rails setups)
         allow(Rails.env).to receive(:local?).and_return("maybe")
         allow(Rails).to receive(:logger).and_return(double("logger", warn: nil))
 
-        # Should treat truthy value as development
+        # EXPECTED BEHAVIOR: Truthy values should trigger development-like behavior
+        # This follows Ruby's truthiness conventions (anything except nil/false is truthy)
         expect {
           test_model.sorted_by_columns("invalid_column:asc")
         }.to raise_error(ArgumentError)
@@ -72,26 +92,37 @@ RSpec.describe Saltbox::SortByColumns::Model, "Error Handling & Environment Beha
   end
 
   describe "comprehensive logger edge cases" do
+    # PATTERN: Defensive Programming Against Logger Failures
+    # Production Rails applications can have various logger configurations that might fail
+    # These tests ensure the gem continues to work even when logging itself fails
+
     context "with different logger configurations" do
       before do
+        # SETUP: Force production-like environment to trigger logging behavior
         allow(Rails.env).to receive(:local?).and_return(false)
       end
 
       it "handles logger with different log levels" do
+        # EDGE CASE: Logger configured with restrictive log level
+        # Some production setups use ERROR level logging, suppressing WARN messages
         logger = double("logger")
         allow(logger).to receive(:warn).and_return(nil)
         allow(logger).to receive(:level).and_return(Logger::ERROR)
         allow(Rails).to receive(:logger).and_return(logger)
 
+        # EXPECTED: Gem should work regardless of whether logging actually occurs
         result = test_model.sorted_by_columns("invalid_column:asc")
         expect(result.count).to eq(3)
       end
 
       it "handles logger that raises exceptions" do
+        # CRITICAL EDGE CASE: Logging itself fails (disk full, permissions, network logger down)
+        # The gem must NEVER crash due to logging failures - that would be worse than the original issue
         logger = double("logger")
         allow(logger).to receive(:warn).and_raise(StandardError, "Logger error")
         allow(Rails).to receive(:logger).and_return(logger)
 
+        # EXPECTED: No error should propagate from logging failures
         expect {
           test_model.sorted_by_columns("invalid_column:asc")
         }.not_to raise_error

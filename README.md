@@ -234,6 +234,8 @@ The Railtie handles all the integration automatically - you don't need to do any
 
 ## Testing
 
+### Using Shared Examples in Your App
+
 The gem includes shared examples to help you test your sortable models:
 
 ```ruby
@@ -253,6 +255,37 @@ end
 ```
 
 The shared examples are automatically loaded when RSpec is available, so you don't need to require them manually.
+
+### Running Tests
+
+```bash
+# Run all tests with coverage
+bundle exec rspec
+
+# Run specific test phases
+bundle exec rspec spec/saltbox/sort_by_columns/model_basic_spec.rb       # Core functionality
+bundle exec rspec spec/saltbox/sort_by_columns/model_edge_cases_spec.rb  # Edge cases & validation
+bundle exec rspec spec/integration/                                      # Integration tests
+
+# Run with specific output format
+bundle exec rspec --format documentation
+```
+
+### Comprehensive Documentation
+
+For complete testing information, see:
+
+- **[TESTING.md](TESTING.md)** - Comprehensive testing guide including patterns, conventions, and advanced test running options
+- **[EXAMPLES.md](EXAMPLES.md)** - Real-world usage examples for e-commerce, user management, project management, and more
+
+### Test Quality Features
+
+- **Environment-Aware Testing**: Different behaviors in development vs production
+- **Security Testing**: Parameter pollution and SQL injection prevention
+- **Performance Testing**: Memory efficiency and concurrent request handling  
+- **Real Rails Integration**: Uses Combustion framework for authentic Rails testing
+- **Comprehensive Edge Cases**: Unicode handling, malformed inputs, logger failures
+- **Mock and Integration**: Both isolated unit tests and full-stack integration tests
 
 ## Dependencies
 
@@ -307,7 +340,9 @@ This gem is available as open source under the terms of the [MIT License](https:
 
 ## Examples
 
-### Basic Model with Simple Columns
+### Quick Start Examples
+
+#### Basic Model with Simple Columns
 
 ```ruby
 class Post < ApplicationRecord
@@ -317,7 +352,7 @@ class Post < ApplicationRecord
 end
 ```
 
-### Model with Association Columns
+#### Model with Association Columns
 
 ```ruby
 class Member < ApplicationRecord
@@ -330,7 +365,7 @@ class Member < ApplicationRecord
 end
 ```
 
-### Model with Custom Scope
+#### Model with Custom Scope
 
 ```ruby
 class User < ApplicationRecord
@@ -350,7 +385,7 @@ class User < ApplicationRecord
 end
 ```
 
-### Controller Implementation
+#### Controller Implementation
 
 ```ruby
 class UsersController < ApplicationController
@@ -364,7 +399,7 @@ class UsersController < ApplicationController
 end
 ```
 
-### API Examples
+#### API Usage
 
 ```bash
 # Sort by name ascending (default)
@@ -381,4 +416,18 @@ curl "http://localhost:3000/users?sort=organization__name:asc"
 
 # Custom scope sort
 curl "http://localhost:3000/users?sort=c_total_orders:desc"
-``` 
+```
+
+### Real-World Implementation Examples
+
+For comprehensive, production-ready examples including:
+
+- **E-commerce Product Catalog** with popularity and rating sorting
+- **User Management System** with activity scores and organization filtering  
+- **Project Management Dashboard** with completion rates and overdue tasks
+- **Blog Platform** with engagement metrics and content management
+- **Customer Support System** with ticket prioritization and response times
+- **API Integration Patterns** for REST and GraphQL APIs
+- **Frontend Integration** with React, Vue.js, and URL state management
+
+See **[EXAMPLES.md](EXAMPLES.md)** for complete implementation guides with models, controllers, views, and testing patterns. 

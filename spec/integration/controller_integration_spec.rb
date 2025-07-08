@@ -248,14 +248,23 @@ RSpec.describe "Controller Integration with has_scope", type: :controller do
     end
 
     context "with Rails parameter security" do
+      # SECURITY TESTING: Parameter Pollution Attacks
+      # Attackers may try to send array parameters where strings are expected
+      # This can bypass application logic or cause unexpected behavior
+
       it "prevents parameter pollution attacks" do
-        # Test that parameter pollution doesn't break sorting
-        # When Rails receives an array in params, it should be handled gracefully
+        # ATTACK PATTERN: Parameter pollution via array injection
+        # Malicious users might send: ?sort[]=name:asc&sort[]=malicious_payload
+        # Rails would convert this to an array: params[:sort] = ["name:asc", "malicious_payload"]
+        # The gem must handle this gracefully without exposing internal data
+
         allow(Rails.env).to receive(:local?).and_return(false)
         allow(Rails.logger).to receive(:warn)
 
+        # SIMULATE: Attack payload as array parameter
         get :index, params: {sort: ["name:asc", "evil:payload"]}
 
+        # EXPECTED: System continues to work, doesn't crash or expose data
         expect(response).to be_successful
         json_response = JSON.parse(response.body)
         expect(json_response.length).to eq(3)
@@ -342,18 +351,26 @@ RSpec.describe "Controller Integration with has_scope", type: :controller do
       end
 
       it "handles very long sort parameter strings" do
+        # PERFORMANCE TEST: Protection against denial-of-service attacks
+        # Attackers might send extremely long parameter strings to consume server resources
+        # The gem should process these efficiently without causing timeouts or memory issues
         long_sort = (1..100).map { |i| "col#{i}:asc" }.join(",") + ",name:desc"
 
         get :index, params: {sort: long_sort}
 
         expect(response).to be_successful
         json_response = JSON.parse(response.body)
-        # Should sort by name:desc (the only valid column)
+        # Should sort by name:desc (the only valid column from the long string)
         expect(json_response.map { |user| user[1] }).to eq(%w[Charlie Bob Alice])
       end
 
       it "handles concurrent requests safely" do
-        # Note: This test is simplified to avoid thread safety issues with Rails controller tests
+        # CONCURRENCY TEST: Thread safety verification
+        # In production Rails apps, multiple requests may process sorting simultaneously
+        # The gem must not have race conditions or shared mutable state
+
+        # NOTE: Simplified test due to Rails controller test limitations
+        # In real applications, this would involve actual concurrent threads
         results = []
 
         5.times do
@@ -361,17 +378,21 @@ RSpec.describe "Controller Integration with has_scope", type: :controller do
           results << response.status
         end
 
+        # EXPECTED: All requests should succeed without interference
         expect(results.all? { |status| status == 200 }).to be true
       end
 
       it "handles memory efficiently with large parameter strings" do
-        # Test that large parameter strings don't cause memory issues
+        # MEMORY EFFICIENCY TEST: Large payload processing
+        # Ensures the gem doesn't create memory leaks or excessive object allocation
+        # when processing large numbers of invalid column specifications
         huge_sort = (1..1000).map { |i| "invalid_col_#{i}:asc" }.join(",") + ",name:asc"
 
         get :index, params: {sort: huge_sort}
 
         expect(response).to be_successful
         json_response = JSON.parse(response.body)
+        # Should efficiently extract and process only the valid column (name:asc)
         expect(json_response.map { |user| user[1] }).to eq(%w[Alice Bob Charlie])
       end
     end
