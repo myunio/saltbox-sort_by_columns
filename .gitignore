@@ -14,4 +14,4 @@ mkmf.log
 *.gem
 .rspec_status
 Gemfile.lock 
-spec/internal/log/*
+spec/rails_app/log/*

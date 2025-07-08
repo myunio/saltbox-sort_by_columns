@@ -2,6 +2,7 @@ require "bundler/setup"
 require "combustion"
 
 # Boot Combustion with only the components we need
+Combustion.path = "spec/rails_app"
 Combustion.initialize! :active_record do
   # Keep the log output clean
   config.active_record.logger = nil

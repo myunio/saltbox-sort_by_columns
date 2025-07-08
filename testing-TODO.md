@@ -235,13 +235,13 @@ This document outlines the comprehensive testing plan to improve test coverage f
 ## Phase 6: Integration & Real-World Testing 🌍
 
 ### Real Rails Integration
-- [ ] Create `spec/integration/real_model_spec.rb`
-- [ ] Set up test Rails models with associations
-- [ ] Test with real ActiveRecord queries
-  - [ ] Works with actual database sorting
-  - [ ] Works with real associations (belongs_to, has_many)
-  - [ ] Integrates with Rails query methods (includes, joins)
-  - [ ] Works with pagination gems
+- [x] **COMPLETED**: `spec/integration/sort_by_columns_integration_spec.rb` provides comprehensive integration testing
+- [x] Set up test Rails models with associations (User, Organization in `spec/rails_app/`)
+- [x] Test with real ActiveRecord queries
+  - [x] Works with actual database sorting
+  - [x] Works with real associations (belongs_to, has_many)
+  - [x] Integrates with Rails query methods (includes, joins)
+  - [x] Works with pagination gems
 - [ ] Test controller integration
   - [ ] Works with has_scope gem
   - [ ] Processes URL parameters correctly
@@ -367,9 +367,9 @@ This document outlines the comprehensive testing plan to improve test coverage f
 - ✅ **Empty order fragments handling**
 
 #### **Test Categories**:
-- **Unit Tests**: 140 examples (model_spec.rb)
-- **Integration Tests**: 48 examples (integration_spec.rb)
-- **Real Rails Environment**: Combustion-based testing
+- **Unit Tests**: 140 examples (spec/saltbox/sort_by_columns/*.rb)
+- **Integration Tests**: 48 examples (spec/integration/sort_by_columns_integration_spec.rb)
+- **Real Rails Environment**: Combustion-based testing (spec/rails_app/)
 - **Multi-Environment**: Development, production, test, staging
 - **Edge Cases**: Comprehensive input validation
 - **Error Handling**: Robust error recovery and logging
