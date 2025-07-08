@@ -209,24 +209,26 @@ This document outlines the comprehensive testing plan to improve test coverage f
 ## Phase 5: Advanced Features & Custom Scopes 🎯
 
 ### Custom Scope Comprehensive Testing
-- [ ] Test `.handle_custom_scope` private method
-  - [ ] Strips `c_` prefix correctly
-  - [ ] Calls correct scope method with direction
-  - [ ] Validates custom scope in allowed fields
-  - [ ] Prevents mixing with other columns
-  - [ ] Handles missing scope methods gracefully
-- [ ] Test custom scope integration
-  - [ ] Works with real model scopes
-  - [ ] Passes direction parameter correctly
-  - [ ] Returns proper ActiveRecord::Relation
+- [x] Test `.handle_custom_scope` private method
+  - [x] Strips `c_` prefix correctly
+  - [x] Calls correct scope method with direction
+  - [x] Validates custom scope in allowed fields
+  - [x] Prevents mixing with other columns
+  - [x] Handles missing scope methods gracefully
+- [x] Test custom scope integration
+  - [x] Works with real model scopes
+  - [x] Passes direction parameter correctly
+  - [x] Returns proper ActiveRecord::Relation
 
 ### Standard Column Processing
-- [ ] Test `.process_standard_columns` private method
-  - [ ] Correctly splits and parses column specifications
-  - [ ] Builds includes array for associations
-  - [ ] Builds order fragments array
-  - [ ] Skips disallowed columns appropriately
-  - [ ] Handles mixed valid/invalid columns
+- [x] Test `.process_standard_columns` private method
+  - [x] Correctly splits and parses column specifications
+  - [x] Builds includes array for associations
+  - [x] Builds order fragments array
+  - [x] Skips disallowed columns appropriately
+  - [x] Handles mixed valid/invalid columns
+
+**✅ PHASE 5 COMPLETE: 57 additional tests (287 total tests, 0 failures)**
 
 ---
 
@@ -299,13 +301,14 @@ This document outlines the comprehensive testing plan to improve test coverage f
 
 ## Comprehensive Testing Summary 📈
 
-**Current Status**: 230 examples, 0 failures (100% pass rate)
+**Current Status**: 287 examples, 0 failures (100% pass rate)
 
 ### Phase Breakdown:
 - **Phase 1**: Foundation (54 tests) - ✅ **COMPLETE**
 - **Phase 2**: Edge Cases & Input Validation (74 additional tests) - ✅ **COMPLETE**
 - **Phase 3**: Error Handling & Environment Behavior (63 additional tests) - ✅ **COMPLETE**
 - **Phase 4**: SQL Generation & Association Testing (29 additional tests) - ✅ **COMPLETE**
+- **Phase 5**: Advanced Features & Custom Scopes (57 additional tests) - ✅ **COMPLETE**
 
 ### Test Coverage Details:
 
@@ -330,6 +333,22 @@ This document outlines the comprehensive testing plan to improve test coverage f
 - ✅ **Table Aliases**: Testing association name as table alias in SQL queries
 - ✅ **Multiple Associations**: Testing multiple associations without duplicate joins
 - ✅ **Custom Class Name**: Testing custom class_name associations handling
+
+#### **Phase 5 Achievements**:
+- ✅ **Custom Scope Testing**: Comprehensive testing of `.handle_custom_scope` private method
+- ✅ **Prefix Stripping**: Testing `c_` prefix removal and method name generation
+- ✅ **Direction Handling**: Testing direction parameter passing and normalization
+- ✅ **Scope Validation**: Testing custom scope validation in allowed fields
+- ✅ **Mixing Prevention**: Testing prevention of mixing custom scopes with other columns
+- ✅ **Method Existence**: Testing handling of missing scope methods gracefully
+- ✅ **Real Scope Integration**: Testing with actual model scopes that use joins and complex logic
+- ✅ **Relation Chaining**: Testing that custom scopes return proper ActiveRecord::Relation objects
+- ✅ **Standard Column Processing**: Comprehensive testing of `.process_standard_columns` private method
+- ✅ **Column Parsing**: Testing splitting and parsing of column specifications
+- ✅ **Includes Building**: Testing building of includes array for associations
+- ✅ **Order Fragments**: Testing building of order fragments array
+- ✅ **Column Skipping**: Testing skipping of disallowed columns appropriately
+- ✅ **Mixed Processing**: Testing handling of mixed valid/invalid columns
 
 #### **Edge Cases Covered**:
 - ✅ Malformed input handling
@@ -358,7 +377,7 @@ This document outlines the comprehensive testing plan to improve test coverage f
 - **SQL Generation**: Comprehensive SQL output verification
 
 ### **Key Achievements**:
-1. **Comprehensive Coverage**: 215 tests covering all major functionality
+1. **Comprehensive Coverage**: 287 tests covering all major functionality
 2. **Real Rails Integration**: Using Combustion for authentic Rails testing
 3. **Multi-Environment Testing**: Development vs production behavior
 4. **Advanced Error Handling**: Robust error recovery and logging
@@ -366,10 +385,11 @@ This document outlines the comprehensive testing plan to improve test coverage f
 6. **Edge Case Coverage**: Malformed input, special characters, Unicode
 7. **Database Integration**: Real ActiveRecord relations and SQL generation
 8. **SQL Generation Testing**: Comprehensive verification of SQL output and association handling
+9. **Custom Scope Testing**: Comprehensive testing of custom scope functionality and integration
+10. **Private Method Testing**: Direct testing of private methods for thorough coverage
 
 ### **Next Steps** (Future Phases):
 While the core functionality is thoroughly tested, potential future enhancements could include:
-- **Phase 5**: Advanced Features & Custom Scopes (Custom scope comprehensive testing)
 - **Phase 6**: Integration & Real-World Testing (Real Rails integration with pagination)
 - **Phase 7**: Performance, Security & Quality (Performance benchmarks, security testing)
 - **Phase 8**: Documentation & Examples (Test documentation and examples)
