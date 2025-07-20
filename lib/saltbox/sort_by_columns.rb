@@ -18,7 +18,7 @@ module Saltbox
     #
     #     belongs_to :organization
     #
-    #     column_sortable_by :name, :email, :created_at, :organization__name
+    #     sort_by_columns :name, :email, :created_at, :organization__name
     #   end
     #
     # @example Usage in a controller

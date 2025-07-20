@@ -324,7 +324,7 @@ bundle exec rake test:fast
 
 ```ruby
 RSpec.describe "Saltbox::SortByColumns::Model" do
-  describe ".column_sortable_by" do
+  describe ".sort_by_columns" do
     context "when given valid column names" do
       it "stores column names as symbols" do
         # Test implementation
@@ -409,7 +409,7 @@ let(:test_model_class) do
       # Mock association reflection
     end
 
-    column_sortable_by :name, :created_at, :category__name
+    sort_by_columns :name, :created_at, :category__name
   end
 end
 ```

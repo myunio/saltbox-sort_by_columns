@@ -40,7 +40,7 @@ RSpec.describe "Controller Integration with has_scope", type: :controller do
   let!(:user3) { User.create!(name: "Bob", email: "bob@example.com", organization: org_a) }
 
   before do
-    User.column_sortable_by :name, :email, :organization__name, :c_full_name
+    User.sort_by_columns :name, :email, :organization__name, :c_full_name
   end
 
   describe "has_scope gem integration" do
@@ -292,7 +292,7 @@ RSpec.describe "Controller Integration with has_scope", type: :controller do
       end
 
       it "raises errors for invalid associations in development" do
-        User.column_sortable_by :name, :invalid_association__name
+        User.sort_by_columns :name, :invalid_association__name
 
         expect {
           get :index, params: {sort: "invalid_association__name:asc"}

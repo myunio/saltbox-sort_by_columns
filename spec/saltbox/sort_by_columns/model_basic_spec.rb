@@ -16,40 +16,40 @@ RSpec.describe Saltbox::SortByColumns::Model, "Basic Functionality" do
     @user3 = User.create!(name: "Bob", email: "bob@example.com", organization: @org_a)
   end
 
-  describe ".column_sortable_by" do
+  describe ".sort_by_columns" do
     it "stores allowed fields as symbols" do
-      test_model.column_sortable_by :name, :email, :created_at
+      test_model.sort_by_columns :name, :email, :created_at
       expect(test_model.column_sortable_allowed_fields).to eq([:name, :email, :created_at])
     end
 
     it "converts string inputs to symbols" do
-      test_model.column_sortable_by "name", "email", "created_at"
+      test_model.sort_by_columns "name", "email", "created_at"
       expect(test_model.column_sortable_allowed_fields).to eq([:name, :email, :created_at])
     end
 
     it "handles mixed string and symbol inputs" do
-      test_model.column_sortable_by :name, "email", :created_at
+      test_model.sort_by_columns :name, "email", :created_at
       expect(test_model.column_sortable_allowed_fields).to eq([:name, :email, :created_at])
     end
 
     it "overwrites previous allowed fields" do
-      test_model.column_sortable_by :name, :email
-      test_model.column_sortable_by :email, :created_at
+      test_model.sort_by_columns :name, :email
+      test_model.sort_by_columns :email, :created_at
       expect(test_model.column_sortable_allowed_fields).to eq([:email, :created_at])
     end
 
     it "handles empty input" do
-      test_model.column_sortable_by
+      test_model.sort_by_columns
       expect(test_model.column_sortable_allowed_fields).to eq([])
     end
 
     it "handles single column input" do
-      test_model.column_sortable_by :name
+      test_model.sort_by_columns :name
       expect(test_model.column_sortable_allowed_fields).to eq([:name])
     end
 
     it "preserves order of columns" do
-      test_model.column_sortable_by :email, :name, :created_at
+      test_model.sort_by_columns :email, :name, :created_at
       expect(test_model.column_sortable_allowed_fields).to eq([:email, :name, :created_at])
     end
   end
@@ -62,12 +62,12 @@ RSpec.describe Saltbox::SortByColumns::Model, "Basic Functionality" do
     end
 
     it "returns correct array of symbols after setting" do
-      test_model.column_sortable_by :name, :email, :created_at
+      test_model.sort_by_columns :name, :email, :created_at
       expect(test_model.column_sortable_allowed_fields).to eq([:name, :email, :created_at])
     end
 
     it "returns cached value on subsequent calls" do
-      test_model.column_sortable_by :name
+      test_model.sort_by_columns :name
       first_call = test_model.column_sortable_allowed_fields
       second_call = test_model.column_sortable_allowed_fields
       expect(first_call).to be(second_call) # Same object reference
@@ -115,7 +115,7 @@ RSpec.describe Saltbox::SortByColumns::Model, "Basic Functionality" do
 
   describe ".sorted_by_columns" do
     before do
-      test_model.column_sortable_by :name, :email, :created_at, :organization__name
+      test_model.sort_by_columns :name, :email, :created_at, :organization__name
     end
 
     context "with nil or blank input" do
@@ -210,7 +210,7 @@ RSpec.describe Saltbox::SortByColumns::Model, "Basic Functionality" do
 
     context "with custom scope columns (c_ prefix)" do
       before do
-        test_model.column_sortable_by :name, :c_full_name
+        test_model.sort_by_columns :name, :c_full_name
       end
 
       it "handles custom scope columns" do

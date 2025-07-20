@@ -20,7 +20,7 @@ RSpec.describe Saltbox::SortByColumns::Model, "Advanced Features & Custom Scopes
     describe ".handle_custom_scope (private method)" do
       before do
         # Set up custom scope columns
-        test_model.column_sortable_by :name, :c_full_name, :c_priority_score
+        test_model.sort_by_columns :name, :c_full_name, :c_priority_score
 
         # Mock the custom scope methods
         allow(test_model).to receive(:sorted_by_full_name).and_return(test_model.order(:name))
@@ -152,7 +152,7 @@ RSpec.describe Saltbox::SortByColumns::Model, "Advanced Features & Custom Scopes
 
       context "handles missing scope methods gracefully" do
         before do
-          test_model.column_sortable_by :name, :c_nonexistent_scope
+          test_model.sort_by_columns :name, :c_nonexistent_scope
         end
 
         context "in development environment" do
@@ -195,7 +195,7 @@ RSpec.describe Saltbox::SortByColumns::Model, "Advanced Features & Custom Scopes
 
       context "handles scope method exceptions" do
         before do
-          test_model.column_sortable_by :name, :c_problematic_scope
+          test_model.sort_by_columns :name, :c_problematic_scope
           allow(test_model).to receive(:respond_to?).with(:sorted_by_problematic_scope).and_return(true)
           allow(test_model).to receive(:sorted_by_problematic_scope).and_raise(StandardError, "Scope error")
         end
@@ -259,7 +259,7 @@ RSpec.describe Saltbox::SortByColumns::Model, "Advanced Features & Custom Scopes
           }
         end
 
-        test_model.column_sortable_by :name, :c_full_name, :c_priority_score, :c_organization_priority
+        test_model.sort_by_columns :name, :c_full_name, :c_priority_score, :c_organization_priority
       end
 
       context "works with real model scopes" do
@@ -363,7 +363,7 @@ RSpec.describe Saltbox::SortByColumns::Model, "Advanced Features & Custom Scopes
   describe "Standard Column Processing" do
     describe ".process_standard_columns (private method)" do
       before do
-        test_model.column_sortable_by :name, :email, :created_at, :organization__name
+        test_model.sort_by_columns :name, :email, :created_at, :organization__name
       end
 
       context "correctly splits and parses column specifications" do
@@ -436,7 +436,7 @@ RSpec.describe Saltbox::SortByColumns::Model, "Advanced Features & Custom Scopes
             has_many :users
           end
 
-          test_model.column_sortable_by :name, :organization__name, :department__name
+          test_model.sort_by_columns :name, :organization__name, :department__name
 
           includes_needed, order_fragments = test_model.send(:process_standard_columns, "organization__name:asc,department__name:desc")
 

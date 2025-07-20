@@ -16,7 +16,7 @@ RSpec.describe Saltbox::SortByColumns::Model, "Error Handling & Environment Beha
     @user3 = User.create!(name: "Bob", email: "bob@example.com", organization: @org_a)
 
     # Set up basic allowed columns
-    test_model.column_sortable_by :name, :email, :created_at, :organization__name
+    test_model.sort_by_columns :name, :email, :created_at, :organization__name
   end
 
   describe "multi-environment error handling" do
@@ -181,7 +181,7 @@ RSpec.describe Saltbox::SortByColumns::Model, "Error Handling & Environment Beha
       it "includes model name in error message" do
         expect {
           test_model.sorted_by_columns("invalid_column:asc")
-        }.to raise_error(ArgumentError, /column_sortable_by: invalid_column/)
+        }.to raise_error(ArgumentError, /SortByColumns: detected a disallowed sortable column:/)
       end
 
       it "handles error message interpolation with special characters" do
@@ -338,7 +338,7 @@ RSpec.describe Saltbox::SortByColumns::Model, "Error Handling & Environment Beha
 
   describe "error handling with custom scope edge cases" do
     before do
-      test_model.column_sortable_by :name, :c_problematic_scope
+      test_model.sort_by_columns :name, :c_problematic_scope
     end
 
     context "in development environment" do
@@ -393,7 +393,7 @@ RSpec.describe Saltbox::SortByColumns::Model, "Error Handling & Environment Beha
       end
 
       it "provides helpful error for deeply nested associations" do
-        test_model.column_sortable_by :name, :nonexistent_association__name
+        test_model.sort_by_columns :name, :nonexistent_association__name
 
         # This should fail because the association "nonexistent_association" doesn't exist
         expect {
@@ -402,7 +402,7 @@ RSpec.describe Saltbox::SortByColumns::Model, "Error Handling & Environment Beha
       end
 
       it "provides helpful error for polymorphic associations" do
-        test_model.column_sortable_by :name, :commentable__title
+        test_model.sort_by_columns :name, :commentable__title
 
         expect {
           test_model.sorted_by_columns("commentable__title:asc")
@@ -417,7 +417,7 @@ RSpec.describe Saltbox::SortByColumns::Model, "Error Handling & Environment Beha
       end
 
       it "logs warning for deeply nested associations" do
-        test_model.column_sortable_by :name, :nonexistent_association__name
+        test_model.sort_by_columns :name, :nonexistent_association__name
 
         result = test_model.sorted_by_columns("nonexistent_association__name:asc")
 
@@ -426,7 +426,7 @@ RSpec.describe Saltbox::SortByColumns::Model, "Error Handling & Environment Beha
       end
 
       it "logs warning for polymorphic associations" do
-        test_model.column_sortable_by :name, :commentable__title
+        test_model.sort_by_columns :name, :commentable__title
 
         result = test_model.sorted_by_columns("commentable__title:asc")
 

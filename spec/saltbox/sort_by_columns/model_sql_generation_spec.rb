@@ -16,7 +16,7 @@ RSpec.describe Saltbox::SortByColumns::Model, "SQL Generation & Association Test
     @user3 = User.create!(name: "Bob", email: "bob@example.com", organization: @org_a)
 
     # Set up basic allowed columns
-    test_model.column_sortable_by :name, :email, :created_at, :organization__name
+    test_model.sort_by_columns :name, :email, :created_at, :organization__name
   end
 
   describe "SQL generation verification" do
@@ -88,7 +88,7 @@ RSpec.describe Saltbox::SortByColumns::Model, "SQL Generation & Association Test
         end
 
         # Add department to allowed columns
-        test_model.column_sortable_by :name, :organization__name, :department__name
+        test_model.sort_by_columns :name, :organization__name, :department__name
 
         sql = test_model.sorted_by_columns("organization__name:asc,department__name:desc").to_sql
 
@@ -367,7 +367,7 @@ RSpec.describe Saltbox::SortByColumns::Model, "SQL Generation & Association Test
       end
 
       # Add category to allowed columns
-      test_model.column_sortable_by :name, :organization__name, :category__name
+      test_model.sort_by_columns :name, :organization__name, :category__name
 
       sql = test_model.sorted_by_columns("organization__name:asc,category__name:desc").to_sql
 
@@ -397,7 +397,7 @@ RSpec.describe Saltbox::SortByColumns::Model, "SQL Generation & Association Test
       end
 
       # Add company to allowed columns
-      test_model.column_sortable_by :name, :company__name
+      test_model.sort_by_columns :name, :company__name
 
       sql = test_model.sorted_by_columns("company__name:asc").to_sql
 

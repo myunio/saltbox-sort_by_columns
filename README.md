@@ -39,7 +39,7 @@ class User < ApplicationRecord
   belongs_to :organization
   has_many :posts
 
-  column_sortable_by :name, :email, :created_at, :organization__name
+  sort_by_columns :name, :email, :created_at, :organization__name
 end
 ```
 
@@ -141,7 +141,7 @@ For more information about has_scope itself, see the [official documentation](ht
 For simple model columns, just pass the column name:
 
 ```ruby
-column_sortable_by :name, :email, :created_at
+sort_by_columns :name, :email, :created_at
 ```
 
 API usage:
@@ -159,7 +159,7 @@ class User < ApplicationRecord
   belongs_to :organization
   
   include Saltbox::SortByColumns::Model
-  column_sortable_by :name, :organization__name, :organization__created_at
+  sort_by_columns :name, :organization__name, :organization__created_at
 end
 ```
 
@@ -186,7 +186,7 @@ class User < ApplicationRecord
   has_many :addresses
   
   # The sortable column name: c_full_address
-  column_sortable_by :name, :c_full_address
+  sort_by_columns :name, :c_full_address
 
   # Required scope name: sorted_by_full_address (c_ becomes sorted_by_)
   scope :sorted_by_full_address, ->(direction) {
@@ -348,7 +348,7 @@ This gem is available as open source under the terms of the [MIT License](https:
 class Post < ApplicationRecord
   include Saltbox::SortByColumns::Model
 
-  column_sortable_by :title, :published_at, :view_count
+  sort_by_columns :title, :published_at, :view_count
 end
 ```
 
@@ -361,7 +361,7 @@ class Member < ApplicationRecord
   belongs_to :organization
   belongs_to :current_status, class_name: "Status", optional: true
 
-  column_sortable_by :name, :email, :organization__name, :current_status__name
+  sort_by_columns :name, :email, :organization__name, :current_status__name
 end
 ```
 
@@ -374,7 +374,7 @@ class User < ApplicationRecord
   has_many :orders
 
   # Custom sortable column: c_total_orders
-  column_sortable_by :name, :email, :c_total_orders
+  sort_by_columns :name, :email, :c_total_orders
 
   # Required scope: sorted_by_total_orders (c_ becomes sorted_by_)
   scope :sorted_by_total_orders, ->(direction) {

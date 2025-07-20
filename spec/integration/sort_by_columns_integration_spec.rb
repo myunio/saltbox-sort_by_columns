@@ -9,7 +9,7 @@ RSpec.describe "SortByColumns integration", type: :model do
   let!(:user3) { User.create!(name: "Bob", email: "bob@example.com", organization: org_a) }
 
   before do
-    User.column_sortable_by :name, :email, :organization__name, :c_full_name
+    User.sort_by_columns :name, :email, :organization__name, :c_full_name
   end
 
   context "standard column sorting" do
@@ -70,7 +70,7 @@ RSpec.describe "SortByColumns integration", type: :model do
   context "custom scope column" do
     it "applies custom c_full_name scope" do
       # Add the custom column to allowed list for this example
-      User.column_sortable_by :name, :c_full_name
+              User.sort_by_columns :name, :c_full_name
       allow(User).to receive(:sorted_by_full_name).and_call_original
 
       result = User.sorted_by_columns("c_full_name:desc")
@@ -122,7 +122,7 @@ RSpec.describe "SortByColumns integration", type: :model do
     it "handles association columns with invalid association names" do
       allow(Rails.env).to receive(:local?).and_return(false)
 
-      User.column_sortable_by :name, :invalid_association__name
+      User.sort_by_columns :name, :invalid_association__name
 
       result = User.sorted_by_columns("invalid_association__name:asc,name:desc")
       expect(result.pluck(:name)).to eq(%w[Charlie Bob Alice])
@@ -142,7 +142,7 @@ RSpec.describe "SortByColumns integration", type: :model do
     it "processes large allowed fields list efficiently" do
       # Create a large list of allowed fields
       large_fields = [:name, :email] + (1..100).map { |i| :"field_#{i}" }
-      User.column_sortable_by(*large_fields)
+      User.sort_by_columns(*large_fields)
 
       result = User.sorted_by_columns("name:asc")
       expect(result.pluck(:name)).to eq(%w[Alice Bob Charlie])
@@ -167,7 +167,7 @@ RSpec.describe "SortByColumns integration", type: :model do
     end
 
     it "raises helpful errors for invalid associations" do
-      User.column_sortable_by :name, :invalid_association__name
+      User.sort_by_columns :name, :invalid_association__name
 
       expect {
         User.sorted_by_columns("invalid_association__name:asc")

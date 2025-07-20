@@ -17,7 +17,7 @@ module Saltbox
     #
     #     belongs_to :organization
     #
-    #     column_sortable_by :name, :email, :created_at, :organization__name
+    #     sort_by_columns :name, :email, :created_at, :organization__name
     #   end
     #
     # @example Sorting in a controller action
@@ -45,13 +45,13 @@ module Saltbox
         #   Custom sort scope format: :c_custom_sort_name
         #
         # @example Setting sortable columns
-        #   column_sortable_by :name, :email, :created_at
+        #   sort_by_columns :name, :email, :created_at
         #
         # @example Setting association sortable columns
-        #   column_sortable_by :name, :organization__name, :department__code
+        #   sort_by_columns :name, :organization__name, :department__code
         #
         # @example Setting custom sort columns (requires a corresponding scope)
-        #   column_sortable_by :name, :c_full_address
+        #   sort_by_columns :name, :c_full_address
         #
         #   # Required scope for custom sort
         #   scope :sorted_by_full_address, ->(direction) {
@@ -70,8 +70,24 @@ module Saltbox
         #   cannot be combined with other columns, e.g., "c_full_address,created_at" will not work.
         #
         # @return [void]
-        def column_sortable_by(*allowed_fields)
+        def sort_by_columns(*allowed_fields)
           @column_sortable_allowed_fields = allowed_fields.map(&:to_sym)
+        end
+
+        # @deprecated Use {#sort_by_columns} instead
+        # Specifies which columns can be sorted on this model
+        #
+        # This method is deprecated. Use `sort_by_columns` instead.
+        #
+        # @param allowed_fields [Array<Symbol, String>] List of column names that can be sorted
+        # @return [void]
+        def column_sortable_by(*allowed_fields)
+          ActiveSupport::Deprecation.instance.warn(
+            "`column_sortable_by` is deprecated and will be removed in a future version. " \
+            "Use `sort_by_columns` instead.",
+            caller_locations(1)
+          )
+          sort_by_columns(*allowed_fields)
         end
 
         # Returns the list of columns that are allowed to be sorted
@@ -204,7 +220,7 @@ module Saltbox
             error_message = <<~ERROR
               SortByColumns: detected a disallowed sortable column:
               %{column}. Ensure you add it to the list of allowed columns
-              with the 'column_sortable_by: %{column}' method. Note: in
+              with the 'sort_by_columns: %{column}' method. Note: in
               production the invalid column will be ignored.
             ERROR
             handle_error(error_message, custom_column)
@@ -254,7 +270,7 @@ module Saltbox
               error_message = <<~ERROR
                 SortByColumns: detected a disallowed sortable column:
                 %{column}. Ensure you add it to the list of allowed columns
-                with the 'column_sortable_by: %{column}' method. Note: in
+                with the 'sort_by_columns: %{column}' method. Note: in
                 production the invalid column will be ignored and allowed
                 columns will be processed.
               ERROR

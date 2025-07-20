@@ -46,7 +46,7 @@ class User < ActiveRecord::Base
   belongs_to :organization
 
   # Basic sortable columns for integration scenarios
-  column_sortable_by :name, :email, :organization__name
+  sort_by_columns :name, :email, :organization__name
 
   # Example custom scope to demonstrate c_ behaviour
   scope :sorted_by_full_name, ->(direction = "asc") {

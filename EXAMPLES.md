@@ -27,7 +27,7 @@ class Product < ApplicationRecord
   has_many :order_items
 
   # Standard columns, associations, and custom scopes
-  column_sortable_by :name, :price, :created_at, :updated_at,
+  sort_by_columns :name, :price, :created_at, :updated_at,
                      :category__name, :brand__name, 
                      :c_popularity, :c_rating, :c_total_sales
 
@@ -195,7 +195,7 @@ class User < ApplicationRecord
   has_many :tickets
   has_many :comments
 
-  column_sortable_by :name, :email, :created_at, :last_sign_in_at,
+  sort_by_columns :name, :email, :created_at, :last_sign_in_at,
                      :organization__name, :role__name,
                      :c_activity_score, :c_ticket_count
 
@@ -320,7 +320,7 @@ class Project < ApplicationRecord
   has_many :project_members
   has_many :members, through: :project_members, source: :user
 
-  column_sortable_by :name, :created_at, :due_date, :status,
+  sort_by_columns :name, :created_at, :due_date, :status,
                      :owner__name, :c_completion_rate, :c_task_count, :c_overdue_count
 
   # Custom scope: Completion rate based on completed tasks
@@ -463,7 +463,7 @@ class Post < ApplicationRecord
   has_many :post_tags
   has_many :tags, through: :post_tags
 
-  column_sortable_by :title, :published_at, :created_at, :view_count,
+  sort_by_columns :title, :published_at, :created_at, :view_count,
                      :author__name, :category__name,
                      :c_comment_count, :c_engagement_score
 
@@ -590,7 +590,7 @@ class Ticket < ApplicationRecord
   belongs_to :priority
   has_many :ticket_comments
 
-  column_sortable_by :subject, :created_at, :updated_at, :status, :due_date,
+  sort_by_columns :subject, :created_at, :updated_at, :status, :due_date,
                      :customer__name, :customer__email, :assignee__name, :priority__name,
                      :c_response_time, :c_last_activity
 

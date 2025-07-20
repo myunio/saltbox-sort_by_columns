@@ -16,7 +16,7 @@ RSpec.describe Saltbox::SortByColumns::Model, "Edge Cases & Input Validation" do
     @user3 = User.create!(name: "Bob", email: "bob@example.com", organization: @org_a)
 
     # Set up basic allowed columns
-    test_model.column_sortable_by :name, :email, :created_at, :organization__name
+    test_model.sort_by_columns :name, :email, :created_at, :organization__name
   end
 
   describe "input validation edge cases" do
@@ -129,7 +129,7 @@ RSpec.describe Saltbox::SortByColumns::Model, "Edge Cases & Input Validation" do
       allow(Rails.env).to receive(:local?).and_return(false)
 
       # Add a column that looks like it has multiple underscores
-      test_model.column_sortable_by :name, :multi_word_association__name
+      test_model.sort_by_columns :name, :multi_word_association__name
 
       result = test_model.sorted_by_columns("multi_word_association__name:asc")
       expect(result.count).to eq(3)
@@ -163,7 +163,7 @@ RSpec.describe Saltbox::SortByColumns::Model, "Edge Cases & Input Validation" do
     it "handles non-existent associations" do
       allow(Rails.env).to receive(:local?).and_return(false)
 
-      test_model.column_sortable_by :name, :nonexistent_association__name
+      test_model.sort_by_columns :name, :nonexistent_association__name
 
       result = test_model.sorted_by_columns("nonexistent_association__name:asc")
       expect(result.count).to eq(3)
@@ -173,7 +173,7 @@ RSpec.describe Saltbox::SortByColumns::Model, "Edge Cases & Input Validation" do
     it "handles valid associations with invalid columns" do
       allow(Rails.env).to receive(:local?).and_return(false)
 
-      test_model.column_sortable_by :name, :organization__nonexistent_column
+      test_model.sort_by_columns :name, :organization__nonexistent_column
 
       result = test_model.sorted_by_columns("organization__nonexistent_column:asc")
       expect(result.count).to eq(3)
@@ -192,7 +192,7 @@ RSpec.describe Saltbox::SortByColumns::Model, "Edge Cases & Input Validation" do
       before { allow(Rails.env).to receive(:local?).and_return(true) }
 
       it "raises ArgumentError for non-existent associations" do
-        test_model.column_sortable_by :name, :nonexistent_association__name
+        test_model.sort_by_columns :name, :nonexistent_association__name
 
         expect {
           test_model.sorted_by_columns("nonexistent_association__name:asc")
@@ -209,7 +209,7 @@ RSpec.describe Saltbox::SortByColumns::Model, "Edge Cases & Input Validation" do
 
   describe "custom scope edge cases" do
     before do
-      test_model.column_sortable_by :name, :c_full_name, :c_custom_sort
+      test_model.sort_by_columns :name, :c_full_name, :c_custom_sort
 
       # Mock custom scope methods
       allow(test_model).to receive(:sorted_by_full_name).and_return(test_model.all)
@@ -246,7 +246,7 @@ RSpec.describe Saltbox::SortByColumns::Model, "Edge Cases & Input Validation" do
     it "handles non-existent custom scope methods" do
       allow(Rails.env).to receive(:local?).and_return(false)
 
-      test_model.column_sortable_by :name, :c_nonexistent_scope
+      test_model.sort_by_columns :name, :c_nonexistent_scope
 
       result = test_model.sorted_by_columns("c_nonexistent_scope:asc")
       expect(result.count).to eq(3)
@@ -289,7 +289,7 @@ RSpec.describe Saltbox::SortByColumns::Model, "Edge Cases & Input Validation" do
       end
 
       it "raises ArgumentError for non-existent custom scope methods" do
-        test_model.column_sortable_by :name, :c_nonexistent_scope
+        test_model.sort_by_columns :name, :c_nonexistent_scope
 
         expect {
           test_model.sorted_by_columns("c_nonexistent_scope:asc")
@@ -317,7 +317,7 @@ RSpec.describe Saltbox::SortByColumns::Model, "Edge Cases & Input Validation" do
       end
 
       it "raises ArgumentError for non-existent associations" do
-        test_model.column_sortable_by :nonexistent__column
+        test_model.sort_by_columns :nonexistent__column
 
         expect {
           test_model.sorted_by_columns("nonexistent__column:asc")
@@ -325,7 +325,7 @@ RSpec.describe Saltbox::SortByColumns::Model, "Edge Cases & Input Validation" do
       end
 
       it "raises ArgumentError for multiple custom scope columns" do
-        test_model.column_sortable_by :c_custom, :name
+        test_model.sort_by_columns :c_custom, :name
 
         expect {
           test_model.sorted_by_columns("c_custom:asc,name:desc")
@@ -340,7 +340,7 @@ RSpec.describe Saltbox::SortByColumns::Model, "Edge Cases & Input Validation" do
       end
 
       it "logs warnings for invalid columns and continues processing" do
-        test_model.column_sortable_by :name
+        test_model.sort_by_columns :name
 
         result = test_model.sorted_by_columns("invalid:asc,name:desc")
 
@@ -356,7 +356,7 @@ RSpec.describe Saltbox::SortByColumns::Model, "Edge Cases & Input Validation" do
       end
 
       it "handles mixed valid and invalid columns gracefully" do
-        test_model.column_sortable_by :name, :email
+        test_model.sort_by_columns :name, :email
 
         result = test_model.sorted_by_columns("invalid:asc,name:desc,bad:asc,email:asc")
 

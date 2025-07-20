@@ -99,7 +99,7 @@ if defined?(RSpec) && RSpec.respond_to?(:shared_examples)
 
       before do
         # Add a column with an association that doesn't actually exist to the allowed list
-        described_class.column_sortable_by(non_existent_assoc, *allowed_columns)
+        described_class.sort_by_columns(non_existent_assoc, *allowed_columns)
 
         # Mock the reflect_on_association method to explicitly check our fake association
         allow(described_class).to receive(:reflect_on_association).and_call_original
@@ -108,7 +108,7 @@ if defined?(RSpec) && RSpec.respond_to?(:shared_examples)
 
       after do
         # Reset the allowed columns
-        described_class.column_sortable_by(*allowed_columns)
+        described_class.sort_by_columns(*allowed_columns)
       end
 
       it "checks if associations exist" do
@@ -158,7 +158,7 @@ if defined?(RSpec) && RSpec.respond_to?(:shared_examples)
         # Make sure the association column is in the allowed list
         current_allowed = described_class.column_sortable_allowed_fields
         unless current_allowed.include?(associated_column[:name].to_sym)
-          described_class.column_sortable_by(associated_column[:name].to_sym, *current_allowed)
+          described_class.sort_by_columns(associated_column[:name].to_sym, *current_allowed)
         end
       end
 
@@ -190,7 +190,7 @@ if defined?(RSpec) && RSpec.respond_to?(:shared_examples)
         # Reset to original allowed columns if needed
         if described_class.column_sortable_allowed_fields.include?(associated_column[:name].to_sym) &&
             !allowed_columns.include?(associated_column[:name].to_sym)
-          described_class.column_sortable_by(*allowed_columns)
+          described_class.sort_by_columns(*allowed_columns)
         end
       end
     end
@@ -203,7 +203,7 @@ if defined?(RSpec) && RSpec.respond_to?(:shared_examples)
         described_class.define_singleton_method(:sorted_by_foo) do |direction|
           "sorted by foo #{direction}"
         end
-        described_class.column_sortable_by :c_foo, *allowed_columns
+        described_class.sort_by_columns :c_foo, *allowed_columns
       end
 
       it "calls a custom scope when the allowed field is prefixed by c_" do
@@ -272,7 +272,7 @@ if defined?(RSpec) && RSpec.respond_to?(:shared_examples)
 
       after do
         # Reset the allowed columns
-        described_class.column_sortable_by(*allowed_columns)
+        described_class.sort_by_columns(*allowed_columns)
       end
     end
 
@@ -285,7 +285,7 @@ if defined?(RSpec) && RSpec.respond_to?(:shared_examples)
           # Make sure the association column is in the allowed list
           current_allowed = described_class.column_sortable_allowed_fields
           unless current_allowed.include?(associated_column[:name].to_sym)
-            described_class.column_sortable_by(associated_column[:name].to_sym, *current_allowed)
+            described_class.sort_by_columns(associated_column[:name].to_sym, *current_allowed)
           end
         end
 
@@ -302,7 +302,7 @@ if defined?(RSpec) && RSpec.respond_to?(:shared_examples)
           # Reset to original allowed columns if needed
           if described_class.column_sortable_allowed_fields.include?(associated_column[:name].to_sym) &&
               !allowed_columns.include?(associated_column[:name].to_sym)
-            described_class.column_sortable_by(*allowed_columns)
+            described_class.sort_by_columns(*allowed_columns)
           end
         end
       end
